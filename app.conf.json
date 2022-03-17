@@ -1,0 +1,5 @@
+{
+    "input_folder": "examples/c2",
+    "destination_folder": "",
+    "excluded_metrics": ["start","end","omitted","seconds"]
+}
