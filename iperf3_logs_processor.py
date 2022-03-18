@@ -35,68 +35,54 @@ def process_json_files():
             list_of_stats_udp.append(dict_udp)
     create_plots(list_of_stats_tcp,list_of_stats_udp)
 
-def create_plot_for_each_file(list_of_stats_tcp , list_of_stats_udp,figure_to_start):
-    f= open("app.conf.json")
-    data=json.load(f)
-    i =figure_to_start
-    for tcp_dict in list_of_stats_tcp:
-        df = pd.DataFrame.from_dict(tcp_dict)
-        for key, value in tcp_dict.items():
-            if str(key) in data["excluded_metrics"]:
+
+def create_plot_for_each_file(list_of_stats,protocol,exclude,destination, figure_to_start):
+    i=figure_to_start
+    for protocol_dict in list_of_stats:
+        df = pd.DataFrame.from_dict(protocol_dict)
+        for key, value in protocol_dict.items():
+            if str(key) in exclude:
                 continue
             fig = plt.figure(i)
-            plt.plot( df['start'], df[str(key)],label="tcp")
+            plt.plot( round(df['start'],3), round(df[str(key)],3),label=protocol)
             plt.xlabel("start")
             plt.ylabel(str(key))
             plt.legend()
-            plt.savefig(data["destination_folder"]+'/plot' +str(i)+".png")
-
-
-
+            plt.savefig(destination+'/plot' +str(i)+".png")
             i+=1
-    # TODO add UDP
+    return i 
         
+
+
+def plot_tcp_or_udp(list_of_stats,protocol,exclude,destination,last_figure_number):
+    for protocol_dict in list_of_stats:
+        i=last_figure_number
+        df = pd.DataFrame.from_dict(protocol_dict)
+        for key, value in protocol_dict.items():
+            if str(key) in exclude:
+                continue
+            fig = plt.figure(i)
+            plt.plot( round(df['start'],3), round(df[str(key)],3),label=protocol)
+            plt.xlabel("start")
+            plt.ylabel(str(key))
+            plt.legend()
+            plt.savefig(destination+'/plot' +str(i)+".png")
+            i+=1
+        #print(df)
+    i= create_plot_for_each_file(list_of_stats,protocol,exclude,destination,i)
+    return i
 
 
 def create_plots(list_of_stats_tcp , list_of_stats_udp):
     f= open("app.conf.json")
     data=json.load(f)
-    #print(len ( list_of_stats_udp ) )
-    for udp_dict in list_of_stats_udp:
-        i =0
-        df = pd.DataFrame.from_dict(udp_dict)
-        for key, value in udp_dict.items():
-            if str(key) in data["excluded_metrics"]:
-                continue
-            fig = plt.figure(i)
-            #print(str(key))
-            plt.plot( df['start'], df[str(key)],label="udp")
-            plt.xlabel("start")
-            plt.ylabel(str(key))
-            plt.legend()
-            plt.savefig(data["destination_folder"]+'/plot' +str(i)+".png")
-
-            i+=1
-        print(df)
-    #TODO add tcp
-    create_plot_for_each_file(list_of_stats_tcp, list_of_stats_udp,i+1)
-    
+    last_figure_numb=0
+    last_figure_numb=plot_tcp_or_udp(list_of_stats_tcp,"TCP",data["excluded_metrics"],data["destination_folder"],last_figure_numb)
+    plot_tcp_or_udp(list_of_stats_udp,"UDP",data["excluded_metrics"],data["destination_folder"],last_figure_numb)
 
 
 
-    
 
-
-
-    #df2 = pd.DataFrame.from_dict(list_of_stats_udp[1])
-
-    #print(df)
-    #ax= df.plot(x ='start', y='bits_per_second', kind = 'line')
-    #df2.plot(ax=ax , x ='start', y='bits_per_second')
-    #plt.show()
-
-
-    
 
 
 process_json_files()
