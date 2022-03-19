@@ -55,9 +55,10 @@ def process_json_files():
             list_of_stats_udp.append(dict_udp)
     create_plots(list_of_stats_tcp,list_of_stats_udp)
 
-
+count=0
 def create_plot_for_each_file(list_of_stats,protocol,exclude,destination, figure_to_start):
     i=figure_to_start
+    global count
     for protocol_dict in list_of_stats:
         df = pd.DataFrame.from_dict(protocol_dict)
         for key, value in protocol_dict.items():
@@ -68,7 +69,8 @@ def create_plot_for_each_file(list_of_stats,protocol,exclude,destination, figure
             plt.xlabel("start")
             plt.ylabel(str(key))
             plt.legend()
-            plt.savefig(destination+'/plot_' +protocol+"_"+str(key)+".png")
+            plt.savefig(destination+'/plot_' +protocol+"_"+str(key)+str(count)+".png")
+            count+=1
             i+=1
     return i 
         
@@ -83,14 +85,17 @@ def plot_tcp_or_udp(list_of_stats,protocol,exclude,destination,last_figure_numbe
                 continue
             fig = plt.figure(i)
             #print(df["filename"][0])
-            plt.plot( round(df['start'],3), round(df[str(key)],3),label=df["filename"][0])
+            if 'client_' in df["filename"][0] or '_C.json' in df['filename'][0]:
+                plt.plot( round(df['start'] + 60,3), round(df[str(key)],3),label=df["filename"][0])
+            else:
+                plt.plot( round(df['start'],3), round(df[str(key)],3),label=df["filename"][0])
             plt.xlabel("start")
             plt.ylabel(str(key))
             plt.legend()
             plt.savefig(destination+'/plot_' +protocol+"_combined_"+str(key)+".png")
             i+=1
         #print(df)
-    i= create_plot_for_each_file(list_of_stats,protocol,exclude,destination,i)
+    #i= create_plot_for_each_file(list_of_stats,protocol,exclude,destination,i)
     return i
 
 
