@@ -77,6 +77,7 @@ def create_plot_for_each_file(list_of_stats,protocol,exclude,destination, figure
 
 
 def plot_tcp_or_udp(list_of_stats,protocol,exclude,destination,last_figure_number):
+    i=last_figure_number
     for protocol_dict in list_of_stats:
         i=last_figure_number
         df = pd.DataFrame.from_dict(protocol_dict)
@@ -85,7 +86,7 @@ def plot_tcp_or_udp(list_of_stats,protocol,exclude,destination,last_figure_numbe
                 continue
             fig = plt.figure(i)
             #print(df["filename"][0])
-            if 'client_' in df["filename"][0] or '_C.json' in df['filename'][0]:
+            if 'server_B_C' in df["filename"][0] or 'server_D' in df['filename'][0]:
                 plt.plot( round(df['start'] + 60,3), round(df[str(key)],3),label=df["filename"][0])
             else:
                 plt.plot( round(df['start'],3), round(df[str(key)],3),label=df["filename"][0])
@@ -95,6 +96,7 @@ def plot_tcp_or_udp(list_of_stats,protocol,exclude,destination,last_figure_numbe
             plt.savefig(destination+'/plot_' +protocol+"_combined_"+str(key)+".png")
             i+=1
         #print(df)
+
     #i= create_plot_for_each_file(list_of_stats,protocol,exclude,destination,i)
     return i
 
