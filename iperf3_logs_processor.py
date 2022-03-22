@@ -86,10 +86,10 @@ def plot_tcp_or_udp(list_of_stats,protocol,exclude,destination,last_figure_numbe
                 continue
             fig = plt.figure(i)
             #print(df["filename"][0])
-            if 'server_B_C' in df["filename"][0] or 'server_D' in df['filename'][0]:
-                plt.plot( round(df['start'] + 60,3), round(df[str(key)],3),label=df["filename"][0])
-            else:
-                plt.plot( round(df['start'],3), round(df[str(key)],3),label=df["filename"][0])
+            #if 'server_B_C' in df["filename"][0] or 'client_C' in df['filename'][0]:
+            #    plt.plot( round(df['start'] + 60,3), round(df[str(key)],3),label=df["filename"][0])
+            #else:
+            plt.plot( round(df['start'],3), round(df[str(key)],3),label=df["filename"][0])
             plt.xlabel("start")
             plt.ylabel(str(key))
             plt.legend()
@@ -97,7 +97,7 @@ def plot_tcp_or_udp(list_of_stats,protocol,exclude,destination,last_figure_numbe
             i+=1
         #print(df)
 
-    #i= create_plot_for_each_file(list_of_stats,protocol,exclude,destination,i)
+    i= create_plot_for_each_file(list_of_stats,protocol,exclude,destination,i)
     return i
 
 

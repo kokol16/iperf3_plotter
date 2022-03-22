@@ -1,6 +1,6 @@
 {
-    "input_folder": "examples/c4/scenario2/server",
-    "destination_folder": "/home/gkokol/Documents/plots/server",
+    "input_folder": "examples/c4/scenario2/client",
+    "destination_folder": "/home/.../Documents/plots/client",
     "excluded_metrics": ["start","end","omitted","seconds","socket","filename","packets"],
     "plot_titles":[]
 }
